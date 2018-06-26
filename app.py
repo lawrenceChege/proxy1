@@ -12,3 +12,26 @@ except KeyboardInterrupt:
 max_conn = 5 # Max connection queues to hold
 buffer_size = 8192 # Max socket buffer size
 
+def start():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)# initialize socket
+        s.bind(('', listening_port))
+        s.listen(max_conn)
+        print "[*] initializing sockets ...Done"
+        print "[*] Sockets binded successfully..."
+        print ("[*] Server strated [ %d ]\n" % (listening_port))
+    exception, e:
+	print "[*] Unble to initialize socket"
+	sys.exit(2)
+
+    while 1:
+	try:
+	    conn, addr = s.accept()
+	    data = conn.recv(buffer_size)
+	    start_new_thread(conn_string, (conn, data, addr))
+	except KeyboardInterupt:
+	    s.close()
+	    print "\n[*] Proxy server shutting down ..."
+	    print "[*] Nothing more buddy..."
+	    sys.exit(1)
+    s.close()
